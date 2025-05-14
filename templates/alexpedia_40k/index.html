@@ -1,0 +1,148 @@
+{% extends 'alexpedia_40k/base_alexpedia.html' %}
+
+{% block content %}
+  <h2>Setup Armies</h2>
+
+  <form id="names_form" style="display:flex;align-items:center;gap:1em;margin-bottom:1.5em;width:100%;">
+    <label>Team 1 name: <input id="team1_name"></label>
+    <label>Team 2 name: <input id="team2_name"></label>
+    <button type="button" id="save_names">Save Names</button>
+    <button type="button" id="reset_rosters_btn" style="margin-left:auto;background:#c33;color:white;">
+      Reset Rosters
+    </button>
+  </form>
+
+  <div class="flex">
+    {% for side in ['team1','team2'] %}
+      <div style="flex:1;border:1px solid #ccc;padding:1em;border-radius:8px;margin:0.5em;">
+        <h3 id="{{side}}_header"></h3>
+
+        <div>
+          <label>Faction:</label><br>
+          <select id="{{side}}_faction">
+            <option value="" disabled selected>-- choose faction --</option>
+            {% for f in ds_by_faction.keys() %}
+              <option value="{{f}}">{{f.replace('-', ' ').title()}}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div>
+          <label>Unit:</label><br>
+          <select id="{{side}}_unit" disabled>
+            <option value="" disabled selected>-- choose unit --</option>
+          </select>
+        </div>
+
+        <!-- we leave the text blank; JS will fill it -->
+        <button type="button" id="{{side}}_add" disabled></button>
+
+        <h4>Roster</h4>
+        <ul id="{{side}}_roster_list"></ul>
+      </div>
+    {% endfor %}
+  </div>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const STORAGE_KEY = 'wh40k_state';
+    const dsByFaction  = {{ ds_by_faction|tojson }};
+
+    // load / save localStorage
+    const loadState = () => {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+      catch { return {}; }
+    };
+    const saveState = st => localStorage.setItem(STORAGE_KEY, JSON.stringify(st));
+
+    const defaults = {
+      team1: { name:'Imperio', roster:[] },
+      team2: { name:'Herejes', roster:[] }
+    };
+    let state = Object.assign({}, defaults, loadState());
+
+    function renderAll() {
+      ['team1','team2'].forEach(side => {
+        // header and name input
+        const header = document.getElementById(side + '_header');
+        header.textContent = state[side].name;
+        const nameInp = document.getElementById(side + '_name');
+        nameInp.value   = state[side].name;
+
+        // update the Add button label
+        const addBtn = document.getElementById(side + '_add');
+        addBtn.textContent = `Add to ${state[side].name}`;
+        addBtn.disabled    = true; // will be re-enabled by unit.onchange
+
+        // rebuild roster list
+        const ul = document.getElementById(side + '_roster_list');
+        ul.innerHTML = '';
+        state[side].roster.forEach(path => {
+          const label = path.split('/',2)[1].slice(0,-5);
+          const li = document.createElement('li');
+          li.textContent = label;
+          const x = document.createElement('span');
+          x.textContent = ' ×'; x.className='remove';
+          x.onclick = () => {
+            state[side].roster = state[side].roster.filter(p=>p!==path);
+            saveState(state); renderAll();
+          };
+          li.appendChild(x);
+          ul.appendChild(li);
+        });
+      });
+    }
+
+    // Save Names
+    document.getElementById('save_names').onclick = () => {
+      state.team1.name = document.getElementById('team1_name').value || state.team1.name;
+      state.team2.name = document.getElementById('team2_name').value || state.team2.name;
+      saveState(state);
+      renderAll();
+    };
+
+    // Reset Rosters
+    document.getElementById('reset_rosters_btn').onclick = () => {
+      if (!confirm('Are you sure you want to reset all rosters?')) return;
+      state.team1.roster = [];
+      state.team2.roster = [];
+      saveState(state);
+      renderAll();
+    };
+
+    // Faction→Unit→Add wiring
+    ['team1','team2'].forEach(side => {
+      const fac = document.getElementById(side + '_faction');
+      const unit = document.getElementById(side + '_unit');
+      const add  = document.getElementById(side + '_add');
+
+      fac.onchange = () => {
+        unit.innerHTML = '<option disabled selected>-- choose unit --</option>';
+        dsByFaction[fac.value].forEach(u => {
+          const o = document.createElement('option');
+          o.value = u.path;
+          o.textContent = u.path.split('/',2)[1].slice(0,-5);
+          unit.appendChild(o);
+        });
+        unit.disabled = false;
+        add.disabled   = true;
+      };
+
+      unit.onchange = () => {
+        add.disabled = !unit.value;
+      };
+
+      add.onclick = () => {
+        const path = unit.value;
+        if (!path) return;
+        state[side].roster.push(path);
+        saveState(state);
+        renderAll();
+      };
+    });
+
+    // initial render
+    renderAll();
+  });
+  </script>
+{% endblock %}

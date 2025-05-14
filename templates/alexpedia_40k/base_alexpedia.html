@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block head %}
+  {{ super() }}
+  {# 40K-only CSS & JS #}
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/alexpedia.css') }}">
+  <script src="{{ url_for('static',filename='js/alexpedia.js') }}" defer></script>
+{% endblock %}
+
+{% block nav %}
+<header class="site-header">
+    {% set current = request.path.rstrip('/') %}
+  <div class="logo-left">
+    <a href="{{ url_for('alexpedia.index') }}">
+      <img src="{{ url_for('static',filename='alexpedia_40k_logo.png') }}" alt="Alexpedia 40K" style="height:150px">
+    </a>
+  </div>
+
+  <nav>
+    <button
+      class="{% if current == url_for('alexpedia.index').rstrip('/') %}active{% endif %}"
+      onclick="location.href='{{ url_for('alexpedia.index') }}'">
+      Setup ⚙️
+    </button>
+    <button
+      class="{% if current.startswith(url_for('alexpedia.roster').rstrip('/')) %}active{% endif %}"
+      onclick="location.href='{{ url_for('alexpedia.roster') }}'">
+      Datasheets 📝
+    </button>
+    <button
+      class="{% if current.startswith(url_for('alexpedia.points').rstrip('/')) %}active{% endif %}"
+      onclick="location.href='{{ url_for('alexpedia.points') }}'">
+      Points Tracker 🎯
+    </button>
+  </nav>
+  
+
+  <div class="logo-right">
+    <a href="{{ url_for('alexpedia.index') }}">
+      <img src="{{ url_for('static',filename='alexpedia_40k_logo.png') }}" alt="Companion" style="height:150px">
+    </a>
+  </div>
+</header>
+
+{% endblock %}

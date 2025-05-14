@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My CV & Portfolio</title>
+  <style>
+    :root {
+      --bg: #121212;
+      --fg: #e0e0e0;
+      --highlight: #1e90ff;
+      --font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background-color: var(--bg); color: var(--fg); font-family: var(--font); line-height: 1.6; }
+    nav { position: sticky; top: 0; background: var(--bg); padding: 1rem; border-bottom: 1px solid #333; z-index: 100; }
+    nav ul { display: flex; list-style: none; justify-content: center; gap: 2rem; }
+    nav a { text-decoration: none; color: var(--fg); font-weight: bold; font-size: 1.2rem; padding: 0.75rem 1.25rem; }
+    nav a:hover { color: var(--highlight); }
+    .container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+
+    /* Home/Profile */
+    section#home {
+      background: linear-gradient(rgba(18,18,18,0.7), rgba(18,18,18,0.7)), url('1637962036096-2.jpeg') center/cover no-repeat;
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+    .profile { display: flex; align-items: center; gap: 2rem; }
+    .profile img { width: 200px; height: 200px; border-radius: 50%; object-fit: cover; border: 2px solid var(--highlight); }
+    .profile-text h1 { margin-bottom: 1rem; font-size: 2rem; }
+    .profile-text p { font-size: 1rem; }
+    .social-banners { margin-top: 1rem; display: flex; gap: 1rem; }
+    .social-banners a { display: inline-block; padding: 0.5rem 1rem; background: var(--highlight); color: var(--bg); text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 0.9rem; }
+    .social-banners a:hover { opacity: 0.9; }
+
+    /* Sections */
+    section { margin-bottom: 4rem; }
+    section h2 { margin-bottom: 1rem; font-size: 1.75rem; border-bottom: 2px solid #333; padding-bottom: 0.5rem; }
+    .pub-info { margin-left: 1.5rem; color: #aaa; font-size: 0.95rem; margin-top: 0.25rem; }
+    section#cv h3 + ul.cv-list { list-style: none; margin-left: 1.5rem; margin-top: 0.5rem; }
+    section#cv ul.cv-list li { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+    section#cv ul.cv-list li .item-text { flex: 1; }
+    section#cv ul.cv-list li .item-date { margin-left: 1rem; white-space: nowrap; color: #aaa; }
+    a.button { display: inline-block; padding: 0.5rem 1rem; background: var(--highlight); color: var(--bg); text-decoration: none; border-radius: 4px; margin-top: 1rem; }
+    a.button:hover { opacity: 0.9; }
+
+    /* Projects: grid of clickable thumbnails with description underneath */
+    #projects ul {
+      list-style: none;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 2rem;
+      margin-left: 0;
+    }
+    #projects ul li {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    #projects ul li a.project-link {
+      display: block;
+    }
+    #projects ul li img.project-thumb {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 1px solid #333;
+    }
+    #projects ul li .pub-info {
+      margin-top: 0.5rem;
+      color: #aaa;
+      font-size: 0.95rem;
+    }
+
+    /* Contact form */
+    form { display: flex; flex-direction: column; gap: 1rem; }
+    input, textarea { padding: 0.75rem; border: 1px solid #333; border-radius: 4px; background: #1e1e1e; color: var(--fg); }
+    input::placeholder, textarea::placeholder { color: #888; }
+    button { padding: 0.75rem; border: none; border-radius: 4px; background: var(--highlight); color: var(--bg); cursor: pointer; font-weight: bold; }
+    button:hover { opacity: 0.9; }
+    a:visited { color: #14579a; text-decoration: none; }
+    a:hover, a:active { color: #ffffff; text-decoration: underline; }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      nav { padding: 0.5rem; }
+      nav ul { justify-content: center; gap: 0.5rem; }
+      nav a { font-size: 0.9rem; padding: 0.4rem 0.6rem; }
+      .container { margin: 1rem auto; padding: 0 0.5rem; }
+      .profile { flex-direction: column; text-align: center; gap: 1rem; }
+      .profile img { width: 100px; height: 100px; }
+      .profile-text h1 { font-size: 1.5rem; }
+      .profile-text p, .profile-text ul li { font-size: 0.9rem; }
+      .social-banners { justify-content: center; flex-wrap: wrap; }
+      section#home { padding: 1.5rem; }
+      section h2 { font-size: 1.5rem; }
+      section#cv ul.cv-list li { flex-direction: column; align-items: flex-start; }
+      section#cv ul.cv-list li .item-date { margin: 0.25rem 0 0; }
+      .pub-info { margin-left: 0; text-align: left; }
+      form input, form textarea { font-size: 0.9rem; }
+      a.button { align-self: center; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#cv">CV</a></li>
+      <li><a href="#publications">Publications</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="container">
+    <!-- Home / Profile -->
+    <section id="home" class="profile">
+      <img src="{{ url_for('static', filename='profile_picture.jpeg') }}" alt="Alejandro Cros Carrillo de Albornoz">
+      <div class="profile-text">
+        <h1>Alejandro Cros Carrillo de Albornoz</h1>
+        <p style="text-align:center">PhD Physics • Mathematical modelling & numerical coding</p>
+        <p style="text-align:center">* * *</p>
+        <ul>
+          <li style="text-align:left">Advanced Modelling & Simulation</li>
+          <li style="text-align:left">Full-Stack Web Development</li>
+          <li style="text-align:left">Circuit Design & FPGA</li>
+        </ul>
+        <div class="social-banners">
+          <a href="https://www.linkedin.com/in/alejandro-cros-carrillo-de-albornoz/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://github.com/acroscarrillo" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://scholar.google.com/citations?user=-0JBC4cAAAAJ&hl=en" target="_blank" rel="noopener noreferrer">Google Scholar</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CV -->
+    <section id="cv">
+      <h2>Curriculum Vitae</h2>
+      <h3>Education</h3>
+      <ul class="cv-list">
+        <li><span class="item-text">Visiting Researcher, Yale University (Full Scholarship)</span><span class="item-date">2023–2024</span></li>
+        <li><span class="item-text">DPhil in Theoretical Physics, University College London (Full Scholarship)</span><span class="item-date">2020–2025</span></li>
+        <li><span class="item-text">MSc in Theoretical Physics, University of Edinburgh (Distinction)</span><span class="item-date">2018–2019</span></li>
+        <li><span class="item-text">BSc in Theoretical Physics, Lancaster University (First Class Honours)</span><span class="item-date">2015–2018</span></li>
+      </ul>
+      <h3>Awards & Honors</h3>
+      <ul class="cv-list">
+        <li><span class="item-text">Yale-UCL PhD exchange programme, University College London</span><span class="item-date">2023</span></li>
+        <li><span class="item-text">Physics Prize for Outstanding Final-Year Performance, Lancaster University</span><span class="item-date">2018</span></li>
+        <li><span class="item-text">Lancaster Award Gold for Non-Academic Contributions, Lancaster University</span><span class="item-date">2018</span></li>
+      </ul>
+      <h3>Teaching</h3>
+      <ul class="cv-list">
+        <li><span class="item-text">Postgraduate Teaching Assistant, University College London (Linear Algebra I–III, Electromagnetism, Differential Equations I–II, Advanced Mathematical Physics, Classical Mechanics)</span><span class="item-date">2020–2023</span></li>
+      </ul>
+      <a href="cv.pdf" class="button" download>Download CV (PDF)</a>
+    </section>
+
+    <!-- Publications -->
+    <section id="publications">
+      <h2>Publications</h2>
+      <ul>
+        <li>
+          <a href="https://pubs.acs.org/doi/10.1021/acs.jctc.4c00544" target="_blank" rel="noopener noreferrer"><strong>Simulating Chemistry on Bosonic Quantum Devices</strong></a>
+          <div class="pub-info">Journal of Chemical Theory and Computation, 2024.</div>
+        </li>
+        <li>
+          <a href="https://pubs.acs.org/doi/10.1021/acs.jpclett.4c02864" target="_blank" rel="noopener noreferrer"><strong>A Roadmap for Simulating Chemical Dynamics on a Parametrically Driven Bosonic Quantum Device</strong></a>
+          <div class="pub-info">The Journal of Physical Chemistry Letters, 2024.</div>
+        </li>
+        <li>
+          <a href="https://link.aps.org/doi/10.1103/PhysRevB.109.214204" target="_blank" rel="noopener noreferrer"><strong>Entanglement transition and heterogeneity in long-range quadratic Lindbladians</strong></a>
+          <div class="pub-info">Physical Review B, 2024.</div>
+        </li>
+        <li>
+          <a href="https://arxiv.org/abs/2409.13113" target="_blank" rel="noopener noreferrer"><strong>Oscillatory dissipative tunneling in an asymmetric double-well potential</strong></a>
+          <div class="pub-info">arXiv preprint, 2024.</div>
+        </li>
+        <li>
+          <a href="https://link.aps.org/doi/10.1103/PhysRevA.100.032329" target="_blank" rel="noopener noreferrer"><strong>Time-optimal implementations of quantum algorithms</strong></a>
+          <div class="pub-info">Physical Review A, 2019.</div>
+        </li>
+        <li>
+          <a href="https://www.researchgate.net/publication/335949880_On_Accelerating_Observers_and_Evaporating_Black_Holes" target="_blank" rel="noopener noreferrer"><strong>On Accelerating Observers and Evaporating Black Holes (MSc. Thesis)</strong></a>
+          <div class="pub-info" style="text-align:left;">University of Edinburgh, 2019.</div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Projects -->
+    <section id="projects">
+      <h2>Other Projects</h2>
+      <ul>
+        <li>
+          <a href="https://acroscarrillo.github.io/MinimalScientificDocs/dev/" class="project-link" target="_blank" rel="noopener noreferrer">
+            <img src="{{ url_for('static', filename='minimal_scientific_docs.png') }}" alt="Minimal Scientific Docs" class="project-thumb">
+          </a>
+          <div class="pub-info">
+            A minimal documentation template for scientific work deployable with Julia &amp; GitHub.
+          </div>
+        </li>
+        <li>
+          <a href="https://github.com/acroscarrillo/FencingBox" class="project-link" target="_blank" rel="noopener noreferrer">
+            <img src="{{ url_for('static', filename='pcb_picture.jpeg') }}" alt="Fencing Signaling Score Box" class="project-thumb">
+          </a>
+          <div class="pub-info">
+            Full-stack engineering of an electric fencing signaling score box based on an ATTINY84 chip. Includes PCB, firmware & product design.
+          </div>
+        </li>
+        <li>
+        <a href="{{ url_for('alexpedia.index') }}" 
+        class="project-link">
+        <img src="{{ url_for('static', filename='alexpedia_40k_logo.png') }}"
+            alt="Alexpedia 40K" class="project-thumb">
+         </a>
+          <div class="pub-info">
+            Alexpedia 40K is a Flask app to build two Warhammer 40K rosters with direct datasheet links and track in-game points.
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact">
+      <h2>Contact Me</h2>
+      <form action="mailto:your.email@example.com" method="post" enctype="text/plain">
+        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="email" name="email" placeholder="Your Email" required>
+        <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+        <button type="submit">Send Message</button>
+      </form>
+      <footer style="max-width:900px; margin:2rem auto 1rem; padding:0 1rem; text-align:center; font-size:0.8rem; color:#888;">
+        Website by <a href="/" target="_blank" rel="noopener">
+            Alejandro Cros Carrillo de Albornoz
+          </a>.
+        <p>* * *</p>
+        <p>Feel free to reuse this site under the <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer" style="color:var(--highlight); text-decoration:none;">MIT License</a> and consider supporting my work by <a href="https://buymeacoffee.com/acroscarrillo" target="_blank" rel="noopener noreferrer" style="color:var(--highlight); text-decoration:none;">buying me a coffee</a>.</p>
+      </footer>
+    </section>
+  </div>
+</body>
+</html>
